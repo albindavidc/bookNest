@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "mongoose": "^8.8.4",
     "typescript": "^5.7.2"
   }
 }
