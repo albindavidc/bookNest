@@ -19,15 +19,8 @@ export const registerUser: RequestHandler = async (req, res, next) => {
     const newUser = new User({ name, email, password: hashedPassword, role });
     await newUser.save();
 
-    res.status(201).json({
-      message: "User registered successfully.",
-      user: {
-        id: newUser._id,
-        name: newUser.name,
-        email: newUser.email,
-        role: newUser.role,
-      },
-    });
+    res.redirect('/');
+      
   } catch (error) {
     next(error);
   }
@@ -63,6 +56,13 @@ export const loginUser: RequestHandler = async (req, res, next): Promise<void> =
 
     const libraryService = new LibraryServiceImpl();
     const homePageData = await libraryService.getUserBorrowingInfo((typedUser as any)._id.toString());
+
+    const adminSideData = await libraryService.getAllBooks();
+
+    if (role === "administrator") {
+      res.redirect("/dashboard");
+      return;
+    }
 
     // Make sure to include `books` in the data passed to the view
     res.render("user/home", {

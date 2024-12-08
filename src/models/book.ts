@@ -9,21 +9,47 @@ export interface Book extends Document {
   description: string;
   isAvailable: boolean;
   isReserved: boolean;
+  isBorrowed: boolean;
   borrowedCount: number;
   totalCountOfBooks: number;
 }
 
 const bookSchema: Schema = new Schema(
   {
-    title: { type: String, required: true },
-    author: { type: String, required: true },
-    genre: { type: String, required: true },
-    publicationYear: { type: Number, required: true },
-    description: { type: String, required: true },
-    isAvailable: { type: Boolean, required: true },
-    isReserved: { type: Boolean, required: true },
-    borrowedCount: { type: Number, default: 0 },
-    totalCountOfBooks: { type: Number, default: 0 },
+    title: {
+      type: String,
+      required: true,
+    },
+    author: {
+      type: String,
+      required: true,
+    },
+    genre: {
+      type: String,
+    },
+    publicationYear: {
+      type: Number,
+    },
+    description: {
+      type: String,
+    },
+    isAvailable: {
+      type: Boolean,
+    },
+    isBorrowed: {
+      type: Boolean,
+    },
+    isReserved: {
+      type: Boolean,
+    },
+    borrowedCount: {
+      type: Number,
+      default: 0,
+    },
+    totalCountOfBooks: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
