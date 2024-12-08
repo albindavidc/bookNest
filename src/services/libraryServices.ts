@@ -68,9 +68,6 @@ export class LibraryServiceImpl implements LibraryService {
     // Example logic to get recommended books
     const recommendedBooks = await bookModel.find({}).limit(5); // Get recommended books (you may change the logic)
 
-
-
-    
     return {
       name: user.name,
       borrowedBooksCount,
@@ -87,5 +84,20 @@ export class LibraryServiceImpl implements LibraryService {
           author: book.author,
         })) || [],
     };
+  }
+
+  async searchBooks(query: string) {
+    try {
+      // Use regex to search for books matching the query in title, author, or category
+      const searchResults = await bookModel
+        .find({
+          $or: [{ title: { $regex: query, $options: "i" } }, { author: { $regex: query, $options: "i" } }, { category: { $regex: query, $options: "i" } }],
+        })
+        .select("title author coverImage"); // Adjust fields as necessary
+
+      return searchResults;
+    } catch (error) {
+      throw new Error("Error fetching search results");
+    }
   }
 }

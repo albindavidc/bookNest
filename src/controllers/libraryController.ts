@@ -62,13 +62,55 @@ export const loginUser: RequestHandler = async (req, res, next): Promise<void> =
     if (role === "administrator") {
       res.redirect("/dashboard");
       return;
+    }else{
+      res.redirect("/home");
     }
 
-    // Make sure to include `books` in the data passed to the view
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+export const getUserHomePage: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = (req.session as any).userId;
+
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized. Please log in." });
+      return;
+    }
+
+    const libraryService = new LibraryServiceImpl();
+    const homePageData = await libraryService.getUserBorrowingInfo(userId.toString());
+
+    // Render the home page with data and default empty search results
     res.render("user/home", {
       ...homePageData,
-      books: homePageData.books || [],  // Ensure books is passed (or empty array if undefined)
+      books: homePageData.books || [], // Ensures `books` is always passed
+      searchResults: [],              // Default empty search results
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const searchBooks: RequestHandler = async (req, res, next) => {
+  try {
+    const { query } = req.query;
+
+    const libraryService = new LibraryServiceImpl();
+    const searchResults = await libraryService.searchBooks(query as string);
+
+    const userId = (req.session as any).userId;
+
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized. Please log in." });
+      return;
+    }
+
+    res.render("user/search", { searchResults, query });
 
   } catch (error) {
     next(error);
