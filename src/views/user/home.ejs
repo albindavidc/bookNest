@@ -176,8 +176,8 @@
                   <td><%= book.dueDate ? new Date(book.dueDate).toLocaleDateString() : 'N/A' %></td>
                   <td><%= book.dueDate && new Date(book.dueDate) < new Date() ? 'Overdue' : 'Active' %></td>
                   <td>
-                    <a href="/books/<%= book._id %>" class="btn btn-sm btn-outline-primary">View</a>
-                    <a href="/books/return/<%= book._id %>" class="btn btn-sm btn-outline-danger">Return</a>
+                    <a href="" class="btn btn-sm btn-outline-primary">View</a>
+                    <a href="" class="btn btn-sm btn-outline-danger">Return</a>
                   </td>
                 </tr>
                 <% }) %>
@@ -207,13 +207,12 @@
         <% books.forEach((book) => { %>
         <div class="col">
           <div class="card shadow-lg border-0 rounded">
-            <img src="<%= book.coverImage %>" class="card-img-top" alt="<%= book.title %>" style="height: 250px; object-fit: cover" />
             <div class="card-body">
               <h5 class="card-title text-center"><%= book.title %></h5>
               <p class="card-text text-center">by <%= book.author %></p>
-              <div class="d-flex justify-content-center">
+              <!-- <div class="d-flex justify-content-center">
                 <a href="/books/<%= book._id %>" class="btn btn-sm btn-outline-primary">View Details</a>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
