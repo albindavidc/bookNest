@@ -1,3 +1,85 @@
 <% layout('../layouts/user') %>
-<h1>Welcome to the Library</h1>
-<p>View books and manage your account here.</p>
+<div class="container py-5">
+  <!-- Welcome Section -->
+  <div class="welcome-section text-center my-4">
+    <h1 class="display-5 fw-bold">Welcome to the Library Management System</h1>
+    <p class="lead">Manage your account, borrow books, and explore the world of knowledge.</p>
+  </div>
+
+  <!-- Borrowed Books Overview -->
+  <div class="row my-5">
+    <div class="col-md-4">
+      <div class="card shadow-lg border-0 rounded text-white bg-primary">
+        <div class="card-body text-center">
+          <h4>Books Borrowed</h4>
+          <p class="display-4 fw-bold"><%= borrowedBooksCount %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-lg border-0 rounded text-white bg-success">
+        <div class="card-body text-center">
+          <h4>Books Due</h4>
+          <p class="display-4 fw-bold"><%= booksDueCount %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-lg border-0 rounded text-white bg-danger">
+        <div class="card-body text-center">
+          <h4>Overdue Fines</h4>
+          <p class="display-4 fw-bold">$<%= overdueFines %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Section -->
+  <div class="search-section py-4">
+    <div class="card shadow-lg border-0">
+      <div class="card-body">
+        <h4 class="text-center mb-4">Search for Books</h4>
+        <form action="/books/search" method="GET" class="d-flex gap-3">
+          <input
+            type="text"
+            name="query"
+            class="form-control"
+            placeholder="Search by title, author, or category"
+            required
+          />
+          <button type="submit" class="btn btn-primary px-4">Search</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recommended Books Section -->
+  <div class="recommended-books my-5">
+    <h4>Recommended Books for You</h4>
+    <div class="row">
+      <% books.forEach((book) => { %>
+        <div class="col-md-3">
+          <div class="card shadow-lg border-0 h-100">
+            <img
+              src="<%= book.coverImage %>"
+              class="card-img-top"
+              alt="<%= book.title %>"
+              style="height: 250px; object-fit: cover;"
+            />
+            <div class="card-body">
+              <h5 class="card-title"><%= book.title %></h5>
+              <p class="card-text">by <%= book.author %></p>
+              <a href="/books/<%= book._id %>" class="btn btn-sm btn-outline-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <!-- Quick Links Section -->
+  <div class="quick-links text-center my-5">
+    <a href="/books/borrowed" class="btn btn-outline-primary me-3">View Borrowed Books</a>
+    <a href="/account" class="btn btn-outline-secondary">Manage Your Account</a>
+  </div>
+</div>

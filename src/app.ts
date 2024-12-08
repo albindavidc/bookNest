@@ -48,7 +48,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-app.use("/user", userRoutes);
+app.use("/", userRoutes);
 
 //Start the server
 const PORT = process.env.PORT || 3000;

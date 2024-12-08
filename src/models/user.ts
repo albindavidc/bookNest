@@ -35,31 +35,21 @@ const userSchema: Schema = new Schema(
     },
     isVerified: {
       type: Boolean,
-      required: true,
     },
     isBlocked: {
       type: Boolean,
-      required: true,
-    },
-    createdAt: {
-      type: Date,
-      required: true,
     },
     updatedAt: {
       type: Date,
-      required: true,
     },
     isDeleted: {
       type: Boolean,
-      required: true,
     },
     deletedAt: {
       type: Date,
-      required: true,
     },
     borrowedBooks: {
       type: [String],
-      required: true,
     },
   },
   {

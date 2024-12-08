@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sign Up</title>
+    <!-- Add Bootstrap for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      body {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Arial", sans-serif;
+      }
+      .signup-container {
+        background-color: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        width: 100%;
+      }
+      .signup-container h2 {
+        font-weight: bold;
+        color: #ffffff;
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+      .form-group label {
+        font-weight: 600;
+      }
+      .form-control {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: none;
+        padding: 0.8rem;
+        border-radius: 5px;
+      }
+      .form-control:focus {
+        box-shadow: 0px 0px 10px #2575fc;
+        border-color: #2575fc;
+      }
+      .btn-primary {
+        background-color: #2575fc;
+        border: none;
+        width: 100%;
+        padding: 0.8rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease-in-out;
+      }
+      .btn-primary:hover {
+        background-color: #6a11cb;
+      }
+      .text-muted {
+        color: #e0e0e0 !important;
+        font-size: 0.9rem;
+      }
+      a {
+        color: #fff;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="signup-container">
+      <h2>Create an Account</h2>
+      <form action="/register" method="POST">
+        <div class="form-group mb-3">
+          <label for="name">Full Name</label>
+          <input type="text" name="name" id="name" class="form-control" placeholder="Enter your full name" required />
+        </div>
+        <div class="form-group mb-3">
+          <label for="email">Email Address</label>
+          <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email address" required />
+        </div>
+        <div class="form-group mb-3">
+          <label for="role">Role</label>
+          <select name="role" id="role" class="form-control" required>
+            <option value="" disabled selected>Select your role</option>
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+            <option value="librarian">Librarian</option>
+            <option value="administrator">Administrator</option>
+          </select>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" class="form-control" placeholder="Create a password" required />
+        </div>
+        <div class="form-group mb-4">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" placeholder="Confirm your password" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+        <div class="text-center mt-3">
+          <p class="text-muted">Already have an account? <a href="/">Login</a></p>
+        </div>
+      </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
