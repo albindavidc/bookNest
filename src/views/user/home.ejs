@@ -1,85 +1,243 @@
-<% layout('../layouts/user') %>
-<div class="container py-5">
-  <!-- Welcome Section -->
-  <div class="welcome-section text-center my-4">
-    <h1 class="display-5 fw-bold">Welcome to the Library Management System</h1>
-    <p class="lead">Manage your account, borrow books, and explore the world of knowledge.</p>
-  </div>
+<style>
+  /* General Styles */
+  body {
+    font-family: "Roboto", sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
 
-  <!-- Borrowed Books Overview -->
-  <div class="row my-5">
-    <div class="col-md-4">
-      <div class="card shadow-lg border-0 rounded text-white bg-primary">
-        <div class="card-body text-center">
-          <h4>Books Borrowed</h4>
-          <p class="display-4 fw-bold"><%= borrowedBooksCount %></p>
+  .container-fluid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full screen */
+  }
+
+  .container {
+    max-width: 1200px;
+    width: 100%;
+    padding: 2rem;
+  }
+
+  .card-body {
+    padding: 2rem;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .card-text {
+    font-size: 1rem;
+    color: #555;
+  }
+
+  /* Welcome Section */
+  .welcome-section h1 {
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+  }
+
+  .welcome-section p {
+    font-size: 1.2rem;
+    color: #6c757d;
+  }
+
+  /* Data Table */
+  .table {
+    width: 100%;
+    margin-bottom: 2rem;
+    border-collapse: collapse;
+  }
+
+  .table th,
+  .table td {
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .table-dark th {
+    background-color: #343a40;
+    color: white;
+  }
+
+  .table-bordered {
+    border: 1px solid #ddd;
+  }
+
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
+  }
+
+  .table-danger {
+    background-color: #f8d7da !important;
+  }
+
+  .table-hover tbody tr:hover {
+    background-color: #e2e6ea;
+  }
+
+  /* Recommended Books */
+  .recommended-books .card {
+    transition: box-shadow 0.3s ease;
+  }
+
+  .recommended-books .card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .recommended-books h4 {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 10px 30px;
+    border-radius: 30px;
+  }
+
+  .btn-outline-primary:hover,
+  .btn-outline-secondary:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+
+  .btn-outline-primary,
+  .btn-outline-secondary {
+    transition: all 0.3s ease;
+  }
+
+  /* Quick Links */
+  .quick-links a {
+    margin-top: 20px;
+    font-weight: 600;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .recommended-books .row {
+      row-gap: 2rem;
+    }
+
+    .quick-links a {
+      margin-top: 10px;
+    }
+
+    .card-body h4 {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+
+
+
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
+  <div class="container py-5">
+    <!-- Welcome Section -->
+    <div class="text-center my-4">
+      <h1 class="display-4 fw-bold text-primary">Welcome to the Library Management System</h1>
+      <p class="lead text-muted mb-5">Manage your account, borrow books, and explore the world of knowledge.</p>
+    </div>
+
+    <!-- Borrowed Books Overview -->
+    <div class="row my-5 justify-content-center">
+      <div class="col-md-12">
+        <div class="card shadow-lg border-0 rounded">
+          <div class="card-body">
+            <h4 class="fw-semibold text-center text-primary">Your Borrowed Books</h4>
+
+            <!-- Data Table for Borrowed Books -->
+            <table class="table table-bordered table-striped">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Author</th>
+                  <th scope="col">Due Date</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% borrowedBooks.forEach((book, index) => { %>
+                <tr class="<%= book.dueDate && new Date(book.dueDate) < new Date() ? 'table-danger' : '' %>">
+                  <td><%= index + 1 %></td>
+                  <td><%= book.title %></td>
+                  <td><%= book.author %></td>
+                  <td><%= book.dueDate ? new Date(book.dueDate).toLocaleDateString() : 'N/A' %></td>
+                  <td><%= book.dueDate && new Date(book.dueDate) < new Date() ? 'Overdue' : 'Active' %></td>
+                  <td>
+                    <a href="/books/<%= book._id %>" class="btn btn-sm btn-outline-primary">View</a>
+                    <a href="/books/return/<%= book._id %>" class="btn btn-sm btn-outline-danger">Return</a>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card shadow-lg border-0 rounded text-white bg-success">
-        <div class="card-body text-center">
-          <h4>Books Due</h4>
-          <p class="display-4 fw-bold"><%= booksDueCount %></p>
+
+    <!-- Overdue Fines Section -->
+    <div class="row my-5">
+      <div class="col-md-12">
+        <div class="card shadow-lg border-0 rounded bg-light">
+          <div class="card-body">
+            <h4 class="fw-semibold text-center text-danger">Your Overdue Fines</h4>
+            <p class="text-center fs-3 text-danger">$<%= overdueFines %></p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card shadow-lg border-0 rounded text-white bg-danger">
-        <div class="card-body text-center">
-          <h4>Overdue Fines</h4>
-          <p class="display-4 fw-bold">$<%= overdueFines %></p>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Search Section -->
-  <div class="search-section py-4">
-    <div class="card shadow-lg border-0">
-      <div class="card-body">
-        <h4 class="text-center mb-4">Search for Books</h4>
-        <form action="/books/search" method="GET" class="d-flex gap-3">
-          <input
-            type="text"
-            name="query"
-            class="form-control"
-            placeholder="Search by title, author, or category"
-            required
-          />
-          <button type="submit" class="btn btn-primary px-4">Search</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Recommended Books Section -->
-  <div class="recommended-books my-5">
-    <h4>Recommended Books for You</h4>
-    <div class="row">
-      <% books.forEach((book) => { %>
-        <div class="col-md-3">
-          <div class="card shadow-lg border-0 h-100">
-            <img
-              src="<%= book.coverImage %>"
-              class="card-img-top"
-              alt="<%= book.title %>"
-              style="height: 250px; object-fit: cover;"
-            />
+    <!-- Recommended Books Section -->
+    <div class="recommended-books my-5">
+      <h4 class="text-center text-primary mb-4">Recommended Books for You</h4>
+      <div class="row row-cols-1 row-cols-md-4 g-4 justify-content-center">
+        <% books.forEach((book) => { %>
+        <div class="col">
+          <div class="card shadow-lg border-0 rounded">
+            <img src="<%= book.coverImage %>" class="card-img-top" alt="<%= book.title %>" style="height: 250px; object-fit: cover" />
             <div class="card-body">
-              <h5 class="card-title"><%= book.title %></h5>
-              <p class="card-text">by <%= book.author %></p>
-              <a href="/books/<%= book._id %>" class="btn btn-sm btn-outline-primary">View Details</a>
+              <h5 class="card-title text-center"><%= book.title %></h5>
+              <p class="card-text text-center">by <%= book.author %></p>
+              <div class="d-flex justify-content-center">
+                <a href="/books/<%= book._id %>" class="btn btn-sm btn-outline-primary">View Details</a>
+              </div>
             </div>
           </div>
         </div>
-      <% }) %>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section py-5">
+      <div class="card shadow-lg border-0 rounded">
+        <div class="card-body">
+          <h4 class="text-center mb-4 text-primary">Search for Books</h4>
+          <form action="/books/search" method="GET" class="d-flex gap-3 justify-content-center">
+            <input type="text" name="query" class="form-control form-control-lg" placeholder="Search by title, author, or category" required />
+            <button type="submit" class="btn btn-lg btn-outline-primary px-4">Search</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Links Section -->
+    <div class="quick-links text-center my-5">
+      <a href="/account" class="btn btn-outline-secondary px-5 py-3">Manage Your Account</a>
     </div>
   </div>
-
-  <!-- Quick Links Section -->
-  <div class="quick-links text-center my-5">
-    <a href="/books/borrowed" class="btn btn-outline-primary me-3">View Borrowed Books</a>
-    <a href="/account" class="btn btn-outline-secondary">Manage Your Account</a>
-  </div>
 </div>
+

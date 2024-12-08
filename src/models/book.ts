@@ -1,6 +1,7 @@
+// models/book.ts
 import mongoose, { Schema, Document } from "mongoose";
 
-interface Book extends Document {
+export interface Book extends Document {
   title: string;
   author: string;
   genre: string;
@@ -8,48 +9,23 @@ interface Book extends Document {
   description: string;
   isAvailable: boolean;
   isReserved: boolean;
-  isBorrowed: boolean;
+  borrowedCount: number;
+  totalCountOfBooks: number;
 }
 
 const bookSchema: Schema = new Schema(
   {
-    title: {
-      type: String,
-      required: true,
-    },
-    author: {
-      type: String,
-      required: true,
-    },
-    genre: {
-      type: String,
-      required: true,
-    },
-    publicationYear: {
-      type: Number,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    isAvailable: {
-      type: Boolean,
-      required: true,
-    },
-    isReserved: {
-      type: Boolean,
-      required: true,
-    },
-    isBorrowed: {
-      type: Boolean,
-      required: true,
-    },
+    title: { type: String, required: true },
+    author: { type: String, required: true },
+    genre: { type: String, required: true },
+    publicationYear: { type: Number, required: true },
+    description: { type: String, required: true },
+    isAvailable: { type: Boolean, required: true },
+    isReserved: { type: Boolean, required: true },
+    borrowedCount: { type: Number, default: 0 },
+    totalCountOfBooks: { type: Number, default: 0 },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const bookModel = mongoose.model<Book>("Book", bookSchema);
-export default bookModel;
+export default mongoose.model<Book>("Book", bookSchema);

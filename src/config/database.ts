@@ -3,10 +3,7 @@ import mongoose from "mongoose";
 const connectToDatabase = async (): Promise<void> => {
     try{
         const uri = "mongodb://localhost:27017/";
-        await mongoose.connect(uri, {
-            ...(<any>{ useNewUrlParser: true, useUnifiedTopology: true })
-
-        });
+        await mongoose.connect(uri);
 
         console.log("connected to MongoDB Compass successfully");
     }catch(error){

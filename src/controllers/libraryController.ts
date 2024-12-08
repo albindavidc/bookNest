@@ -1,6 +1,8 @@
-import { Request, Response, RequestHandler, NextFunction } from "express";
+import { RequestHandler } from "express";
 import User from "../models/user";
 import bcrypt from "bcryptjs";
+import { LibraryServiceImpl } from "../services/libraryServices";
+import { IUser } from "../models/user"; // Import IUser interface
 
 export const registerUser: RequestHandler = async (req, res, next) => {
   const { name, email, password, role } = req.body;
@@ -31,35 +33,48 @@ export const registerUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const loginUser: RequestHandler = async (req, res, next) => {
+export const loginUser: RequestHandler = async (req, res, next): Promise<void> => {
   const { email, password, role } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    // Find the user by email and populate borrowed books
+    const user = await User.findOne({ email }).populate("borrowedBooks.book", "title coverImage author");
+    
     if (!user) {
       res.status(404).json({ message: "User not found. Please register." });
       return;
     }
 
-    if (user.role !== role) {
-      res.status(403).json({ message: `Unauthorized. Expected role: ${user.role}` });
+    const typedUser = user as IUser;
+
+    if (typedUser.role !== role) {
+      res.status(403).json({ message: `Unauthorized. Expected role: ${typedUser.role}` });
       return;
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, typedUser.password);
     if (!isMatch) {
       res.status(400).json({ message: "Invalid credentials. Please try again." });
       return;
     }
 
-    (req.session as any).userId = user._id;
+    (req.session as any).userId = typedUser._id;
     (req.session as any).isAuthenticated = true;
 
-    res.render("user/home", { name: user.name });
+    const libraryService = new LibraryServiceImpl();
+    const homePageData = await libraryService.getUserBorrowingInfo((typedUser as any)._id.toString());
+
+    // Make sure to include `books` in the data passed to the view
+    res.render("user/home", {
+      ...homePageData,
+      books: homePageData.books || [],  // Ensure books is passed (or empty array if undefined)
+    });
+
   } catch (error) {
     next(error);
   }
 };
+
 
 // Logout user
 export const logoutUser: RequestHandler = async (req, res, next) => {

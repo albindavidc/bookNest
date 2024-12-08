@@ -1,20 +1,30 @@
-import mongoose, { Schema, Document } from "mongoose";
+// models/user.ts
+import mongoose, { Schema, Document, model } from "mongoose";
+import { Book } from '../models/book'; // Import both the value and the type
 
-interface User extends Document {
+// Define the User interface type
+interface BorrowedBook {
+  book: Book | Schema.Types.ObjectId;  // Allow either the book document or the ObjectId
+  dueDate: Date;
+}
+
+export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
   role: string;
   isVerified: boolean;
   isBlocked: boolean;
-  createdAt: Date;
   updatedAt: Date;
   isDeleted: boolean;
   deletedAt: Date;
-  borrowedBooks: string[];
+  borrowedBooksCount: number;
+  booksDueCount: number;  
+  overdueFines: number;
+  borrowedBooks: BorrowedBook[];
 }
 
-const userSchema: Schema = new Schema(
+const userSchema = new Schema<IUser>(
   {
     name: {
       type: String,
@@ -48,8 +58,22 @@ const userSchema: Schema = new Schema(
     deletedAt: {
       type: Date,
     },
-    borrowedBooks: {
-      type: [String],
+    borrowedBooks: [
+      {
+        book: { type: mongoose.Schema.Types.ObjectId, ref: "Book" }, // Reference to the Book model
+        dueDate: { type: Date, default: null }, // Additional field for due date
+      },
+    ],
+
+    borrowedBooksCount: {
+      type: Number,
+    },
+
+    booksDueCount: {
+      type: Number,
+    },
+    overdueFines: {
+      type: Number,
     },
   },
   {
@@ -57,4 +81,5 @@ const userSchema: Schema = new Schema(
   }
 );
 
-export default mongoose.model<User>("User", userSchema);
+const User = model<IUser>('User', userSchema);
+export default User;

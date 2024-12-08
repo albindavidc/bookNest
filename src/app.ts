@@ -2,13 +2,13 @@ import express from "express";
 import mongoose from "mongoose";
 import session from "express-session";
 import MongoDBStore from "connect-mongodb-session";
-
 import { Request, Response, NextFunction } from "express";
 import connectToDatabase from "./config/database";
 connectToDatabase();
-
 import userRoutes from "./routes/user";
 import path from "path";
+import expressLayouts from 'express-ejs-layouts';
+
 
 const app = express();
 const MongoDBStoreSession = MongoDBStore(session);
@@ -49,6 +49,14 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use("/", userRoutes);
+
+
+
+app.use(expressLayouts);
+app.set('layout', 'layouts/user'); // Default layout file
+
+
+
 
 //Start the server
 const PORT = process.env.PORT || 3000;
